@@ -37,7 +37,8 @@ import { Pane,
          DialogComponent,
          DialogAnchorDirective,
          StopwatchComponent,
-         StopwatchDialogComponent
+         StopwatchDialogComponent,
+         ForAnyOrder
        } from './example-code/index'
 import { appRoutes } from './routes'
 import { Error404Component } from './errors/404.component'
@@ -78,7 +79,8 @@ declare let jQuery: Object; // global var
     DialogComponent,// squire test
     DialogAnchorDirective,// squire test
     StopwatchComponent,// squire test
-    StopwatchDialogComponent// squire test
+    StopwatchDialogComponent,// squire test
+    ForAnyOrder// squire test
   ],
   providers: [
     EventService, 
