@@ -11,13 +11,16 @@
         </li>
         <li><a [routerLink]="['/events/new']" routerLinkActive="active">Create Event</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" > <!-- "href=#" tells it to stay on current page at the top of that page -->
             Events
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
             <li >
               <a href="">Angular Connect</a>
+            </li>
+            <li>
+              <a [routerLink]="['experiments/primaryScreen']" > Experiments </a> 
             </li>
           </ul>
         </li>

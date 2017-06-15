@@ -20,5 +20,6 @@ export const appRoutes:Routes = [
   { path: 'events/session/new', component: CreateSessionComponent },
   { path: '404', component: Error404Component },
   { path: '', redirectTo: '/events', pathMatch: 'full'},
-  { path: 'user', loadChildren: 'app/user/user.module#UserModule'} // may also be importing UserModule at Navigation?
+  { path: 'user', loadChildren: 'app/user/user.module#UserModule'}, // may also be importing UserModule at Navigation? Yes
+  { path: 'experiments', loadChildren: 'app/experiments/experiments.module#ExperimentsModule' }
 ]
