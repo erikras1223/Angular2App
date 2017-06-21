@@ -78,7 +78,7 @@ declare let jQuery: Object; // global var
     DialogComponent,// squire test
     DialogAnchorDirective,// squire test
     StopwatchComponent,// squire test
-    StopwatchDialogComponent// squire test
+    StopwatchDialogComponent,// squire test
   ],
   providers: [
     EventService, 
