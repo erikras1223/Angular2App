@@ -9,6 +9,6 @@ export class EventListResolver implements Resolve<any> {
   constructor(private eventService:EventService) {}
   
   resolve() { // resolve is good with asyncrous data, it waits to load before display component
-    return this.eventService.getEvents() // this is an obserable, but resolve doesn't require calling subscribe
+    return this.eventService.getEvents() // this is an obserable, but resolve doesn't require calling subscribe because resolve does it.
   }
 }

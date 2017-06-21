@@ -1,7 +1,7 @@
-import {StartScreenComponent} from './startScreen.component'
+import {PrimaryTabContainer} from './primaryTabContainer.component'
 //import {FinalizeScreenComponent } from './finalizeScreen.component'
 
 export const ExperimentRoutes = [
-  {path: 'primaryScreen', component: StartScreenComponent}
+  {path: 'primaryScreen', component: PrimaryTabContainer}
 
 ]

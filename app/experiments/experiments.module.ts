@@ -4,8 +4,13 @@ import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import {ExperimentRoutes} from './experiment.routes'
-import {FinalizeScreenComponent} from './finalizeScreen.component'
-import {StartScreenComponent} from './startScreen.component'
+import {FinalizeScreenComponent,
+       PrimaryTabContainer,
+       Tab,
+       Tabs,
+       PrepSetupTab
+
+    } from './index'
 
 
 
@@ -17,8 +22,11 @@ import {StartScreenComponent} from './startScreen.component'
     RouterModule.forChild(ExperimentRoutes)
   ],
   declarations: [
-      StartScreenComponent,
+      PrimaryTabContainer,
       FinalizeScreenComponent,
+      Tab,
+      Tabs,
+      PrepSetupTab
   ],
   providers: [
   ]

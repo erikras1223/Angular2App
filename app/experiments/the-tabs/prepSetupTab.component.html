@@ -1,0 +1,22 @@
+<div>
+    <h2>Binding radio buttons</h2>
+
+    <p>Binding radio button lists</p>
+
+    <form #testform="ngForm">
+        <table>
+            <thead>
+                <td>Description</td>
+                <td></td>
+            </thead>
+            <tbody>
+                <tr *ngFor="let entry of entries; let idx = index">
+                    <td>{{ entry.description }}</td>
+                    <td><input type="radio" name="certificategroup" (change)="onSelectionChange(entry)" [checked]="(idx === 0)"
+                            [value]="entry.value"></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+</div>
