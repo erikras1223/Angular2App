@@ -9,7 +9,7 @@ import { IEvent } from './shared/index'
     <h1>Upcoming Angular 2 Events</h1>
     <hr/>
     <div class="row">
-      <div *forAnyOrder="let event of events" class="col-md-5">
+      <div *ngFor="let event of events" class="col-md-5">
         <event-thumbnail [event]="event"></event-thumbnail>
      </div>
   </div>

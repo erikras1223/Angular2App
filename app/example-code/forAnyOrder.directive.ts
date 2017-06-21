@@ -23,7 +23,8 @@ import {
 })
 export class ForAnyOrder {
     private collection: any
-    private differ:IterableDiffer<any> // differ can tell changes in iterable list
+    private differ:IterableDiffer<any>//adding typing to IterableDiffer is angular4, but seems break code
+     // differ can tell changes in iterable list
     private viewMap:Map<any,ViewRef> = new Map<any,ViewRef>();
 
     constructor(private differs:IterableDiffers,
@@ -57,7 +58,8 @@ export class ForAnyOrder {
         */ 
 
         if (this.differ) {
-            let changes = this.differ.diff(this.collection);
+            let changes = this.differ.diff(this.collection); // this is the line that it can't get past
+                                                             // it say "ERROR TypeError: this._trackByFn is not a function"
             if (changes) {
             
                 changes.forEachAddedItem((change:any) => {
