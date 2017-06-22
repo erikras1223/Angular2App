@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import {ExperimentRoutes} from './experiment.routes'
-import {FinalizeScreenComponent,
+import {FinalizeTab,
        PrimaryTabContainer,
        Tab,
        Tabs,
@@ -23,7 +23,7 @@ import {FinalizeScreenComponent,
   ],
   declarations: [
       PrimaryTabContainer,
-      FinalizeScreenComponent,
+      FinalizeTab,
       Tab,
       Tabs,
       PrepSetupTab

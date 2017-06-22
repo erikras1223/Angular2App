@@ -10,7 +10,7 @@ import { Router } from '@angular/router'
 
   `
 })
-export class FinalizeScreenComponent {
+export class FinalizeTab {
 
   constructor(private router:Router) {
   }

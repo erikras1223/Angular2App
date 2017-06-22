@@ -36,7 +36,7 @@ export class ForAnyOrder {
     set forAnyOrderOf(value:any){
         this.collection = value;
         if(value && !this.differ ){
-            this.differ = this.differs.find(value).create(this.changeDetector); // prereq to use
+            this.differ = this.differs.find(value).create((value)=>value); // prereq to use
                                                             
         }
      }
