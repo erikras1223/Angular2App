@@ -1,4 +1,4 @@
-import { Component, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
+import { Component, ContentChildren, QueryList, AfterContentInit, AfterViewInit, AfterContentChecked } from '@angular/core';
 import { Tab } from './tab.component';
 
 @Component({
@@ -12,13 +12,28 @@ import { Tab } from './tab.component';
     <ng-content></ng-content>
   `
 })
-export class Tabs implements AfterContentInit {
+export class Tabs implements AfterContentInit, AfterViewInit, AfterContentChecked {
   
   @ContentChildren(Tab) tabs: QueryList<Tab>;
+  constructor(){
+    console.log("ccontent children have loaded")
+    console.log(this.tabs);
+  }
+  
+  ngAfterContentChecked(){
+    console.log("content checked children have loaded")
+     console.log(this.tabs);
+  }
+  ngAfterViewInit(){
+    console.log("view children have loaded")
+    
+  }
   
   // contentChildren are set
   ngAfterContentInit() {
     // get all active tabs
+    console.log("content children have loaded")
+    console.log(this.tabs)
     let activeTabs = this.tabs.filter((tab)=>tab.active);
     
     // if there is no active tab set, activate the first

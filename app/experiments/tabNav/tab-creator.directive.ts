@@ -4,7 +4,10 @@ import {
     Input,
     TemplateRef,
     ViewContainerRef,
-    ComponentRef
+    ComponentFactoryResolver,
+    ComponentRef,
+    IterableDiffer,
+    IterableDiffers
 } from '@angular/core';
 
 @Directive({
@@ -13,15 +16,19 @@ import {
 export class CreateTab {
     cmpRef: ComponentRef<any>;
     private isViewInitialized: boolean = false;
-    private tabCollection: Array<any>
+    private tabComponent: any
+    private differ: IterableDiffer<any>
 
     @Input()
-    set createTabOf(value: any) {
-
+    set createTab(value: any) {
+        this.tabComponent = value;
+        console.log(this.tabComponent)
     }
 
 
-    constructor(private changeDetector: ChangeDetectorRef,
+    constructor(
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private cdRef: ChangeDetectorRef,
         private viewContainer: ViewContainerRef, ) { }
 
 
@@ -34,14 +41,25 @@ export class CreateTab {
         if (this.cmpRef) {
             this.cmpRef.destroy();
         }
-    
-        /*
-        let factory = this.componentFactoryResolver.resolveComponentFactory(this.type);
-        this.cmpRef = this.target.createComponent(factory)
-        // to access the created instance use
-        // this.compRef.instance.someProperty = 'someValue';
-        // this.compRef.instance.someOutput.subscribe(val => doSomething());
-        this.cdRef.detectChanges();*/
+
+        let factory = this.componentFactoryResolver.resolveComponentFactory(this.tabComponent);
+        this.cmpRef = this.viewContainer.createComponent(factory)
+        this.cdRef.detectChanges();
+    }
+
+    ngOnChanges() {
+        this.updateComponent();
+    }
+
+    ngAfterViewInit() {
+        this.isViewInitialized = true;
+        this.updateComponent();
+    }
+
+    ngOnDestroy() {
+        if (this.cmpRef) {
+            this.cmpRef.destroy();
+        }
     }
 
 

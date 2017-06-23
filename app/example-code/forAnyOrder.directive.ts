@@ -37,6 +37,7 @@ export class ForAnyOrder {
         this.collection = value;
         if(value && !this.differ ){
             this.differ = this.differs.find(value).create((value)=>value); // prereq to use
+            // it said "ERROR TypeError: this._trackByFn is not a function before change"
                                                             
         }
      }
@@ -59,7 +60,7 @@ export class ForAnyOrder {
 
         if (this.differ) {
             let changes = this.differ.diff(this.collection); // this is the line that it can't get past
-                                                             // it say "ERROR TypeError: this._trackByFn is not a function"
+                                                             
             if (changes) {
             
                 changes.forEachAddedItem((change:any) => {
