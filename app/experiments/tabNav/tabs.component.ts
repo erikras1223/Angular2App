@@ -1,4 +1,4 @@
-import { Component, ContentChildren, QueryList, AfterContentInit, AfterViewInit, AfterContentChecked } from '@angular/core';
+import { Component,Input, ContentChildren, QueryList, AfterContentInit, AfterViewInit, AfterContentChecked } from '@angular/core';
 import { Tab } from './tab.component';
 
 @Component({
@@ -12,25 +12,16 @@ import { Tab } from './tab.component';
     <ng-content></ng-content>
   `
 })
-export class Tabs implements AfterContentInit, AfterViewInit, AfterContentChecked {
-  
-  @ContentChildren(Tab) tabs: QueryList<Tab>;
-  constructor(){
-    console.log("ccontent children have loaded")
-    console.log(this.tabs);
+export class Tabs  { //AfterContentInit, AfterViewInit, AfterContentChecked {
+  @Input() set tabViews(value:any){
+      console.log(value)
   }
-  
-  ngAfterContentChecked(){
-    console.log("content checked children have loaded")
-     console.log(this.tabs);
-  }
-  ngAfterViewInit(){
-    console.log("view children have loaded")
-    
-  }
-  
+ 
+ // @ContentChildren(Tab) tabs: QueryList<Tab>;
+ 
+ 
   // contentChildren are set
-  ngAfterContentInit() {
+  /*ngAfterContentInit() {
     // get all active tabs
     console.log("content children have loaded")
     console.log(this.tabs)
@@ -40,7 +31,7 @@ export class Tabs implements AfterContentInit, AfterViewInit, AfterContentChecke
     if(activeTabs.length === 0) {
       this.selectTab(this.tabs.first);
     }
-  }
+  
   
   selectTab(tab: Tab){
     // deactivate all tabs
@@ -48,6 +39,15 @@ export class Tabs implements AfterContentInit, AfterViewInit, AfterContentChecke
     
     // activate the tab the user has clicked on.
     tab.active = true;
-  }
+  }*/
 
 }
+
+ /*ngAfterContentChecked(){
+    console.log("content checked children have loaded")
+     console.log(this.tabs);
+  }
+  ngAfterViewInit(){
+    console.log("view children have loaded")
+    
+  }*/

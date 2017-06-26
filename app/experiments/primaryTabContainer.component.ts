@@ -7,8 +7,13 @@ import {FinalizeTab} from './the-tabs/finalizeScreen.component'
   entryComponents: [PrepSetupTab,FinalizeTab]
 })
 export class PrimaryTabContainer implements AfterViewInit {
+  
   components:Array<any> = [PrepSetupTab,FinalizeTab]
+  
   constructor(private cdr: ChangeDetectorRef){}
+
+
+
   ngAfterViewInit(){
     this.cdr.detectChanges();
     
