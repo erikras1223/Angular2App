@@ -5,9 +5,7 @@ import {
     TemplateRef,
     ViewContainerRef,
     ComponentFactoryResolver,
-    ComponentRef,
-    IterableDiffer,
-    IterableDiffers
+    ComponentRef
 } from '@angular/core';
 
 @Directive({
@@ -17,7 +15,6 @@ export class CreateTab {
     cmpRef: ComponentRef<any>;
     private isViewInitialized: boolean = false;
     private tabComponent: any
-    private differ: IterableDiffer<any>
 
     @Input()
     set createTab(value: any) {
@@ -29,9 +26,7 @@ export class CreateTab {
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,
         private cdRef: ChangeDetectorRef,
-        private viewContainer: ViewContainerRef, ) { }
-
-
+        private viewContainer: ViewContainerRef, private tempRef: TemplateRef<any> ) { }
 
 
     updateComponent() {
@@ -41,9 +36,10 @@ export class CreateTab {
         if (this.cmpRef) {
             this.cmpRef.destroy();
         }
+        
 
-        let factory = this.componentFactoryResolver.resolveComponentFactory(this.tabComponent);
-        this.cmpRef = this.viewContainer.createComponent(factory)
+        let factory = this.componentFactoryResolver.resolveComponentFactory();
+        this.cmpRef = this.viewContainer.createComponent()
         this.cdRef.detectChanges();
     }
 

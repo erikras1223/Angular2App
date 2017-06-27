@@ -1,7 +1,6 @@
 <tabs *createTab="components" >
     <div *ngFor="let comp of components">
-        <tab  [tabTitle]="'Tab 1'">
-            <prep-tab></prep-tab>
+        <tab createTab  [tabTitle]="'Tab 1'">
         </tab>
     </div>
 </tabs>
