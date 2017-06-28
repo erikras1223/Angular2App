@@ -32,6 +32,6 @@ import {FinalizeTab,
   ],
   providers: [
   ],
-  entryComponents: [PrepSetupTab,FinalizeTab]
+  entryComponents: [PrepSetupTab,FinalizeTab,Tab,Tabs]
 })
 export class ExperimentsModule { }
