@@ -5,14 +5,21 @@ import {
     TemplateRef,
     ViewContainerRef,
     ComponentFactoryResolver,
+<<<<<<< HEAD
     ComponentRef
+=======
+    ComponentRef,
+  
+>>>>>>> 6eaa3e1a385d944509ce50629bc86b50653243c8
 } from '@angular/core';
+
+import {Tab} from './tab.component'
 
 @Directive({
     selector: '[createTab]'
 })
 export class CreateTab {
-    cmpRef: ComponentRef<any>;
+    transcludedTabRef: ComponentRef<any>;
     private isViewInitialized: boolean = false;
     private tabComponent: any
 
@@ -26,40 +33,45 @@ export class CreateTab {
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,
         private cdRef: ChangeDetectorRef,
+<<<<<<< HEAD
         private viewContainer: ViewContainerRef, private tempRef: TemplateRef<any> ) { }
+=======
+        private viewContainer: ViewContainerRef ) { }
 
 
-    updateComponent() {
-        if (!this.isViewInitialized) {
-            return;
-        }
-        if (this.cmpRef) {
-            this.cmpRef.destroy();
+>>>>>>> 6eaa3e1a385d944509ce50629bc86b50653243c8
+
+
+    addComponent() {
+
+        if (this.transcludedTabRef) {
+            this.transcludedTabRef.destroy();
         }
         
 
-        let factory = this.componentFactoryResolver.resolveComponentFactory();
-        this.cmpRef = this.viewContainer.createComponent()
+        let compFactory = this.componentFactoryResolver.resolveComponentFactory(this.tabComponent);
+        let compRef = this.viewContainer.createComponent(compFactory);
+        let tabFactory = this.componentFactoryResolver.resolveComponentFactory(Tab);
+
+        this.transcludedTabRef = this.viewContainer.createComponent(tabFactory,this.viewContainer.length - 1, undefined, [[compRef.location.nativeElement]]);
+
         this.cdRef.detectChanges();
     }
 
     ngOnChanges() {
-        this.updateComponent();
+        this.addComponent();
     }
 
     ngAfterViewInit() {
         this.isViewInitialized = true;
-        this.updateComponent();
+        this.addComponent();
     }
 
     ngOnDestroy() {
-        if (this.cmpRef) {
-            this.cmpRef.destroy();
+        if (this.transcludedTabRef) {
+            this.transcludedTabRef.destroy();
         }
     }
-
-
-
 
 
 }
