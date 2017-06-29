@@ -1,9 +1,9 @@
-import { Component, Input, ContentChildren, QueryList, AfterContentInit, AfterViewInit, AfterContentChecked } from '@angular/core';
+import { Component } from '@angular/core';
 import { Tab } from './tab.component';
 
 @Component({
   selector: 'tabs',
-  template: `
+  template:`
     <ul class="nav nav-tabs">
       <li *ngFor="let tab of tabs" (click)="selectTab(tab)" [class.active]="tab.active">
         <a>{{tab.title}}</a>
@@ -12,42 +12,28 @@ import { Tab } from './tab.component';
     <ng-content></ng-content>
   `
 })
-export class Tabs implements AfterContentChecked,  AfterViewInit{ //AfterContentInit, AfterViewInit, AfterContentChecked {
+export class Tabs  {
 
+  tabs: Tab[];
 
-  @ContentChildren(Tab) set tabs(content : QueryList<Tab>){
-    console.log("I am getting created with tabs: ", content)
-  };
-
-  ngAfterContentChecked(){
-      console.log(this.tabs);
-  }
-  ngAfterViewInit(){
-      console.log(this.tabs);
-  }
-
-  // contentChildren are set
-  ngAfterContentInit() {
+  initContent(tabs: Tab[]) {
+    this.tabs = tabs;
     // get all active tabs
-    console.log("content children have loaded")
-    console.log(this.tabs)
-    let activeTabs = this.tabs.filter((tab) => tab.active);
+    let activeTabs = this.tabs.filter((tab)=>tab.active);
 
     // if there is no active tab set, activate the first
-    if (activeTabs.length === 0) {
-      this.selectTab(this.tabs.first);
+    if(activeTabs.length === 0) {
+      this.selectTab(this.tabs[0]);
     }
-
   }
 
   selectTab(tab: Tab){
     // deactivate all tabs
-    this.tabs.toArray().forEach(tab => tab.active = false);
-    
+    this.tabs.forEach(tab => tab.active = false);
+
     // activate the tab the user has clicked on.
     tab.active = true;
   }
-
 
 }
 

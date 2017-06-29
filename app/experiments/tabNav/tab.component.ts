@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ContentChild, AfterContentInit } from '@angular/core';
+import {PrepSetupTab} from '../the-tabs/prepSetupTab.component'
 // Probably in real app would move to a shared folder visible in app.module
 @Component({
   selector: 'tab',
@@ -16,4 +17,7 @@ import { Component, Input } from '@angular/core';
 export class Tab {
   @Input('tabTitle') title: string;
   @Input() active = false;
+  
+
+
 }

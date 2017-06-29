@@ -29,6 +29,8 @@ export class PrimaryTabContainer implements AfterViewInit {
 
   add():void{
         let transTabRefs: Array<any>= []
+        let tabs = [];
+
         this.components.forEach(tabComponent=>{
           
           let compFactory = this.compFR.resolveComponentFactory(tabComponent);
@@ -36,12 +38,13 @@ export class PrimaryTabContainer implements AfterViewInit {
           let tabFactory = this.compFR.resolveComponentFactory(Tab);
 
           let transcludedTabRef = this.viewContainer.createComponent(tabFactory,this.viewContainer.length - 1, undefined, [[compRef.location.nativeElement]]);
+          tabs.push(transcludedTabRef.instance)
           transTabRefs.push(transcludedTabRef.location.nativeElement);
         })
 
         let tabsFactory = this.compFR.resolveComponentFactory(Tabs); // notice this is the tabs not tab
-        
-        this.viewContainer.createComponent(tabsFactory,0,undefined,[transTabRefs]);
+        const compRef = this.viewContainer.createComponent(tabsFactory,0,undefined,[transTabRefs]);
+        compRef.instance.initContent(tabs);
         
 
 
