@@ -1,14 +1,17 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { CommonModule } from '@angular/common'
+import {PrimaryTab } from './primaryTab.component'
 
 @Component({
 
     selector: 'prep-tab',
     templateUrl:  'app/experiments/the-tabs/prepSetupTab.component.html'
 })
-export class PrepSetupTab {
+export class PrepSetupTab extends PrimaryTab {
     entries = [];
+
+
     selectedEntry: { [key: string]: any } = {
         value: null,
         description: null
@@ -16,7 +19,10 @@ export class PrepSetupTab {
 
 
     constructor(private router: Router) {
+        super(name) // complete garbage, but satisfies the super
     }
+
+    
 
 
     ngOnInit() {

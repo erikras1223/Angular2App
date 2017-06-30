@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
+import { PrimaryTab } from  './primaryTab.component'
 
 @Component({
   template:
@@ -10,10 +11,13 @@ import { Router } from '@angular/router'
 
   `
 })
-export class FinalizeTab {
+export class FinalizeTab extends PrimaryTab {
 
   constructor(private router:Router) {
+    super(name)
+
   }
+  
 
   cancel() {
     this.router.navigate(['events'])

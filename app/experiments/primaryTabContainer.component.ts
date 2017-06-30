@@ -1,30 +1,32 @@
 import { Component,
-        AfterViewInit,
+        OnInit,
         ChangeDetectorRef,
-        OnChanges,
         ViewContainerRef,
         ComponentFactoryResolver,
-        ComponentRef } from '@angular/core'
+        ComponentRef,
+        Type } from '@angular/core'
 
 import {PrepSetupTab} from './the-tabs/prepSetupTab.component'
 import {FinalizeTab} from './the-tabs/finalizeScreen.component'
 import {Tabs} from "./tabNav/tabs.component"
 import {Tab} from "./tabNav/tab.component"
+import {PrimaryTab } from './the-tabs/primaryTab.component'
 
 
 @Component({
   templateUrl: 'app/experiments/primaryTabContainer.component.html',
   entryComponents: [PrepSetupTab,FinalizeTab]
 })
-export class PrimaryTabContainer implements AfterViewInit {
+export class PrimaryTabContainer  implements OnInit {
   
-  components:Array<any> = [PrepSetupTab,FinalizeTab]
+  components:Array<PrimaryTab> = [PrepSetupTab,FinalizeTab]
   
 
-  
+
   constructor(private cdr: ChangeDetectorRef,
               private compFR: ComponentFactoryResolver,
-              private viewContainer: ViewContainerRef ){}
+              private viewContainer: ViewContainerRef ){
+              }
 
 
   add():void{
@@ -33,8 +35,9 @@ export class PrimaryTabContainer implements AfterViewInit {
 
         this.components.forEach(tabComponent=>{
           
-          let compFactory = this.compFR.resolveComponentFactory(tabComponent);
-          let compRef = this.viewContainer.createComponent(compFactory);
+          let compFactory = this.compFR.resolveComponentFactory(<Type<PrimaryTab>>tabComponent);
+          let compRef = this.viewContainer.createComponent(compFactory)
+          
           let tabFactory = this.compFR.resolveComponentFactory(Tab);
 
           let transcludedTabRef = this.viewContainer.createComponent(tabFactory,this.viewContainer.length - 1, undefined, [[compRef.location.nativeElement]]);
@@ -52,7 +55,7 @@ export class PrimaryTabContainer implements AfterViewInit {
 
 
   
-  ngAfterViewInit(){
+  ngOnInit(){
     this.add()
     this.cdr.detectChanges();
     

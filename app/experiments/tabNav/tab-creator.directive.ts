@@ -5,12 +5,7 @@ import {
     TemplateRef,
     ViewContainerRef,
     ComponentFactoryResolver,
-<<<<<<< HEAD
     ComponentRef
-=======
-    ComponentRef,
-  
->>>>>>> 6eaa3e1a385d944509ce50629bc86b50653243c8
 } from '@angular/core';
 
 import {Tab} from './tab.component'
@@ -33,13 +28,9 @@ export class CreateTab {
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,
         private cdRef: ChangeDetectorRef,
-<<<<<<< HEAD
-        private viewContainer: ViewContainerRef, private tempRef: TemplateRef<any> ) { }
-=======
         private viewContainer: ViewContainerRef ) { }
 
 
->>>>>>> 6eaa3e1a385d944509ce50629bc86b50653243c8
 
 
     addComponent() {

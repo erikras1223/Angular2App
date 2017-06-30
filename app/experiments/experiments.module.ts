@@ -9,7 +9,7 @@ import {FinalizeTab,
        Tab,
        Tabs,
        PrepSetupTab,
-       CreateTab
+       PrimaryTab
 
     } from './index'
 
@@ -28,7 +28,7 @@ import {FinalizeTab,
       Tab,
       Tabs,
       PrepSetupTab,
-      CreateTab
+      PrimaryTab
   ],
   providers: [
   ],
