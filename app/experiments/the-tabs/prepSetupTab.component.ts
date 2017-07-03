@@ -10,8 +10,7 @@ import {PrimaryTab } from './primaryTab.component'
 })
 export class PrepSetupTab extends PrimaryTab {
     entries = [];
-
-
+    name:string = "Prep Tab";
     selectedEntry: { [key: string]: any } = {
         value: null,
         description: null
@@ -19,7 +18,7 @@ export class PrepSetupTab extends PrimaryTab {
 
 
     constructor(private router: Router) {
-        super(name) // complete garbage, but satisfies the super
+        super() // complete garbage, but satisfies the super
     }
 
     

@@ -1,7 +1,8 @@
 import {PrimaryTabContainer} from './primaryTabContainer.component'
-//import {FinalizeScreenComponent } from './finalizeScreen.component'
+import {ExperimentsResolver } from './experiments-resolver.service'
+
 
 export const ExperimentRoutes = [
-  {path: 'primaryscreen', component: PrimaryTabContainer}
+  {path: 'primaryscreen', component: PrimaryTabContainer,resolve:{tabs:ExperimentsResolver}}
 
 ]

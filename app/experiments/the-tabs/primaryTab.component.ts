@@ -12,8 +12,8 @@ import { CommonModule } from '@angular/common'
 export class PrimaryTab {
     name:string
 
-    constructor(name:string){
-        this.name = name; // the value is garbage will fix later doesn't cause any exceptions at this time
+    constructor(){
+        this.name = "A Nameless Tab"; // the value is garbage will fix later doesn't cause any exceptions at this time
     }
 
     

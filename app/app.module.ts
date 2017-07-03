@@ -40,6 +40,8 @@ import { Pane,
          StopwatchDialogComponent,
          ForAnyOrder
        } from './example-code/index'
+import {ExperimentsResolver,
+        ExperimentsService } from './experiments/index'
 import { appRoutes } from './routes'
 import { Error404Component } from './errors/404.component'
 import { AuthService } from './user/auth.service'
@@ -91,6 +93,8 @@ declare let jQuery: Object; // global var
     EventListResolver,
     VoterService,
     AuthService,
+    ExperimentsService,
+    ExperimentsResolver,
     { 
       provide: 'canDeactivateCreateEvent', // in router.ts path and its component is tied to deactivate 
       useValue: checkDirtyState // handler method checkDirtyState found below

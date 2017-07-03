@@ -12,9 +12,10 @@ import { PrimaryTab } from  './primaryTab.component'
   `
 })
 export class FinalizeTab extends PrimaryTab {
+  name:string = "Summary"
 
   constructor(private router:Router) {
-    super(name)
+    super()
 
   }
   
