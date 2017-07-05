@@ -9,7 +9,8 @@ import {FinalizeTab,
        Tab,
        Tabs,
        PrepSetupTab,
-       PrimaryTab
+       PrimaryTab,
+       BillingTab
 
     } from './index'
 
@@ -28,10 +29,11 @@ import {FinalizeTab,
       Tab,
       Tabs,
       PrepSetupTab,
-      PrimaryTab
+      PrimaryTab,
+      BillingTab
   ],
   providers: [
   ],
-  entryComponents: [PrepSetupTab,FinalizeTab,Tab,Tabs]
+  entryComponents: [PrepSetupTab,FinalizeTab,Tab,Tabs,BillingTab]
 })
 export class ExperimentsModule { }

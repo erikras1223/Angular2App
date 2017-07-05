@@ -27,6 +27,10 @@ export class Tabs  {
     }
   }
 
+  addTab(tab:Tab){
+    this.tabs.push(tab)
+  }
+
   selectTab(tab: Tab){
     // deactivate all tabs
     this.tabs.forEach(tab => tab.active = false);

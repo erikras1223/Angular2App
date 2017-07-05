@@ -63,9 +63,6 @@ ngAfterViewInit(){ // squire test
     this.field4= "hello I am field4"
 
 
-
-
-
     this.name = new FormControl('', Validators.required)
     this.presenter = new FormControl('', Validators.required)
     this.duration = new FormControl('', Validators.required)

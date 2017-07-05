@@ -1,22 +1,157 @@
 <div>
     <h2>Binding radio buttons</h2>
 
-    <p>Binding radio button lists</p>
 
-    <form #testform="ngForm">
-        <table>
-            <thead>
-                <td>Description</td>
-                <td></td>
-            </thead>
-            <tbody>
-                <tr *ngFor="let entry of entries; let idx = index">
-                    <td>{{ entry.description }}</td>
-                    <td><input type="radio" name="certificategroup" (change)="onSelectionChange(entry)" [checked]="(idx === 0)"
-                            [value]="entry.value"></td>
-                </tr>
-            </tbody>
-        </table>
+
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="prepForm">
+
+        <fieldset>
+            <div class="form-group" [ngClass]="{'has-error': (prepForm.get('labName').touched || prepForm.get('labName').dirty) && !prepForm.get('labName').valid }">
+                <label class="col-md-2 control-label" for="labNameId">Lab Name</label>
+
+                <div class="col-md-8">
+                    <input class="form-control" id="labNameId" type="text" placeholder="Lab Name (required)" formControlName="labName" />
+                    <span class="help-block" *ngIf="(prepForm.get('labName').touched || prepForm.get('labName').dirty) && prepForm.get('labName').errors">
+                            <span *ngIf="prepForm.get('labName').errors.required">
+                                Please enter your Lab name.
+                            </span>
+                    <span *ngIf="prepForm.get('labName').errors.minlength">
+                                The lab name must be longer than 3 characters.
+                            </span>
+                    </span>
+                </div>
+            </div>
+            <div formGroupName="emailGroup"
+                     [ngClass]="{'has-error': prepForm.get('emailGroup').errors }">
+                    <div class="form-group"
+                        [ngClass]="{'has-error': (prepForm.controls.emailGroup.controls.email.touched || 
+                                                  prepForm.get('emailGroup.email').dirty) &&
+                                                  !prepForm.get('emailGroup.email').valid }">
+                        <label class="col-md-2 control-label" 
+                            for="emailId">Email</label>
+
+                        <div class="col-md-8">
+                            <input class="form-control" 
+                                id="emailId" 
+                                type="email" 
+                                placeholder="Email (required)" 
+                                formControlName="email" />
+                            <span class="help-block" *ngIf="(prepForm.get('emailGroup.email').touched ||
+                                                             prepForm.get('emailGroup.email').dirty) &&
+                                                             prepForm.get('emailGroup.email').errors">
+                                <span *ngIf="prepForm.get('emailGroup.email').errors.required">
+                                    Please enter your email address.
+                                </span>
+                                <span *ngIf="prepForm.get('emailGroup.email').errors.pattern">
+                                    Please enter a valid email address.
+                                </span>
+
+                                <!-- This one does not work -->
+                                <span *ngIf="prepForm.get('emailGroup.email').errors.email">
+                                    Please enter a valid email address.
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                        [ngClass]="{'has-error': (prepForm.get('emailGroup.confirmEmail').touched || 
+                                                prepForm. get('emailGroup.confirmEmail').dirty) && 
+                                                !prepForm.get('emailGroup.confirmEmail').valid }">
+                        <label class="col-md-2 control-label" 
+                            for="confirmEmailId">Confirm Email</label>
+
+                        <div class="col-md-8">
+                            <input class="form-control" 
+                                id="confirmEmailId" 
+                                type="email" 
+                                placeholder="Confirm Email (required)" 
+                                formControlName = "confirmEmail" />
+                            <span class="help-block" *ngIf="(prepForm.get('emailGroup.confirmEmail').touched || 
+                                                            prepForm.get('emailGroup.confirmEmail').dirty) && 
+                                                            (prepForm.get('emailGroup.confirmEmail').errors ||
+                                                            prepForm.get('emailGroup').errors) ">
+                                <span *ngIf="prepForm.get('emailGroup.confirmEmail').errors?.required">
+                                    Please confirm your email address.
+                                </span>
+                                <span *ngIf="prepForm.get('emailGroup').errors?.match">
+                                    The confirmation does not match the email address.
+                                </span>   
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="form-group"
+                    [ngClass]="{'has-error': !prepForm.get('phone').valid }">
+                    <label class="col-md-2 control-label" 
+                        for="phoneId">Phone</label>
+
+                    <div class="col-md-8">
+                        <input class="form-control" 
+                               id="phoneId" 
+                               type="tel" 
+                               placeholder="Phone" 
+                               formControlName = "phone" />
+                        <span class="help-block" *ngIf="prepForm.get('phone').errors">
+                            <span *ngIf="prepForm.get('phone').errors.required">
+                                Please enter your phone number.
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+
+
+            <table>
+                <thead>
+                    <td>Description</td>
+                    <td></td>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entry of entries; let idx = index">
+                        <td>{{ entry.description }}</td>
+                        <td><input type="radio" name="certificategroup" (change)="onSelectionChange(entry)" [checked]="(idx === 0)"
+                                [value]="entry.value"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Send Notifications</label>
+                <div class="col-md-8">
+                    <label class="radio-inline">
+                                <input type="radio" 
+                                       value="email" 
+                                       formControlName = "notification"
+                                       (click)="setNotification('email')">Email
+                            </label>
+                    <label class="radio-inline">
+                                <input type="radio" 
+                                       value="text" 
+                                       formControlName = "notification"
+                                       (click)="setNotification('text')">Text
+                            </label>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-1">
+                    <span>
+                        <button class="btn btn-primary" type="submit"
+                                [disabled]="!prepForm.valid">
+                                Save
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </fieldset>
     </form>
 
 </div>
+<br>Dirty: {{ prepForm.dirty }} 
+<br>Touched: {{ prepForm.touched }}
+<br>Valid: {{ prepForm.valid }}
+<br>Value: {{ prepForm.value | json }}

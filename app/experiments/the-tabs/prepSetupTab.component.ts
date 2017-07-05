@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
+import {FormGroup,FormBuilder, Validators,AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common'
 import {PrimaryTab } from './primaryTab.component'
 
@@ -16,9 +16,11 @@ export class PrepSetupTab extends PrimaryTab {
         description: null
     };
 
+    prepForm: FormGroup
 
-    constructor(private router: Router) {
-        super() // complete garbage, but satisfies the super
+
+    constructor(private fb: FormBuilder) {
+        super() // super has no use yet
     }
 
     
@@ -44,6 +46,19 @@ export class PrepSetupTab extends PrimaryTab {
             }
         ];
 
+        this.prepForm = this.fb.group({
+            labName: ['', [Validators.required, Validators.minLength(3) ]],
+            billingAcount: '',
+            experimentType: '',
+            emailGroup: this.fb.group({
+                email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+')]],
+                confirmEmail: ['', Validators.required],
+            }, {validator: emailMatcher}),
+            phone: '',
+            notification: 'email',
+                  
+        })
+
         // select the first one
         if (this.entries) {
             this.onSelectionChange(this.entries[0]);
@@ -54,9 +69,36 @@ export class PrepSetupTab extends PrimaryTab {
         // clone the object for immutability
         this.selectedEntry = Object.assign({}, this.selectedEntry, entry); // copying entry into selectedEntry
     }
+    save(){
 
-
-    cancel() {
-        this.router.navigate(['events'])
     }
+
+    setNotification(notifyVia: string): void { // used for radio button email and text option
+        // Will change validation during runtime
+        const phoneControl = this.prepForm.get('phone'); // getting access to the phoneControl
+        if (notifyVia === 'text') {
+            phoneControl.setValidators(Validators.required);
+        } else {
+            phoneControl.clearValidators();
+        }
+        phoneControl.updateValueAndValidity();
+    }
+
+
+
+
+
 }
+
+function emailMatcher(c: AbstractControl): {[key: string]: boolean} | null { // returns if its valid returns null or object if invalid defining the broken rule
+    // we have key and value pair. key is a string, value is boolean
+    let emailControl = c.get('email');
+    let confirmControl = c.get('confirmEmail');
+    if (emailControl.pristine || confirmControl.pristine) {
+      return null;
+    }
+    if (emailControl.value === confirmControl.value) {
+        return null;
+    }
+    return { 'match': true };// if we need to reference the validator in html we do ...errors.match,
+ }
