@@ -28,6 +28,7 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
   componentNames:Array<string>
   verName:any
   tabsRef:ComponentRef<Tabs>
+
   
 
 
