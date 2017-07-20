@@ -6,28 +6,31 @@ import { Component,
         ComponentRef,
         ComponentFactory,
         OnDestroy,
+        Input,
         Type,VERSION } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import {PrepSetupTab} from './the-tabs/prepSetupTab.component'
-import {FinalizeTab} from './the-tabs/finalizeScreen.component'
-import {BillingTab} from './the-tabs/billing-tab.component'
-import {Tabs} from "./tabNav/tabs.component"
-import {Tab} from "./tabNav/tab.component"
-import {PrimaryTab } from './the-tabs/primaryTab.component'
+import {PrepSetupTab} from '../the-tabs/prepSetupTab.component'
+import {FinalizeTab} from '../the-tabs/finalizeScreen.component'
+import {BillingTab} from '../the-tabs/billing-tab.component'
+import {Tabs} from "./tabs.component"
+import {Tab} from "./tab.component"
+import {PrimaryTab } from '../the-tabs/primaryTab.component'
+import {TabChangeEvent} from './tab-change-event'
 
 
 @Component({
-  templateUrl: 'app/experiments/primaryTabContainer.component.html',
-  entryComponents: [PrepSetupTab,FinalizeTab]
+  selector: 'tab-container',
+  templateUrl: 'app/experiments/tabNav/primaryTabContainer.component.html'
 })
 export class PrimaryTabContainer  implements OnInit, OnDestroy {
   
   
   //components:Array<PrimaryTab>
   components:Array<any>
-  componentNames:Array<string>
+  @Input() componentNames:Array<string>
   verName:any
   tabsRef:ComponentRef<Tabs>
+  intialized:boolean = false
   
 
 
@@ -40,6 +43,7 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
 
 
   initTab():void{
+
         let transTabRefs: Array<any>= []
         let tabs = [];
 
@@ -65,6 +69,10 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
         let tabsFactory = this.compFR.resolveComponentFactory(Tabs); // notice this is the tabs not tab
         this.tabsRef = this.viewContainer.createComponent(tabsFactory,0,undefined,[transTabRefs]);
         this.tabsRef.instance.initContent(tabs);
+        this.tabsRef.instance.tabChange.subscribe( event =>{
+          console.log("hello",event)
+          
+        } )
 
   }
 
@@ -75,20 +83,16 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
     this.componentNames = this.route.snapshot.data['tabs']; // getting a array called tabs off the route
     this.initTab()
     this.cdr.detectChanges();
+    this.intialized = false;
     
   }
+  ngOnChange(){
+    if(this.intialized){
+      this.initTab();
+    }
 
-   addTab(){
-     let compFactory = this.compFR.resolveComponentFactory(BillingTab);
-     let compRef = this.viewContainer.createComponent(compFactory);
-     let tabFactory = this.compFR.resolveComponentFactory(Tab);
-     let transcludedTabRef = this.viewContainer.createComponent(tabFactory,this.viewContainer.length - 1,
-                                                                   undefined,[[compRef.location.nativeElement]]);
-     transcludedTabRef.instance.title = compRef.instance.name;
-     this.tabsRef.instance.addTab(transcludedTabRef.instance)
-     this.tabsRef
-  
   }
+
 
 
   ngOnDestroy() {

@@ -4,7 +4,9 @@ import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import {ExperimentRoutes} from './experiment.routes'
-import {FinalizeTab,
+import {
+       ExperimentContainer,
+       FinalizeTab,
        PrimaryTabContainer,
        Tab,
        Tabs,
@@ -24,6 +26,7 @@ import {FinalizeTab,
     RouterModule.forChild(ExperimentRoutes)
   ],
   declarations: [
+      ExperimentContainer,
       PrimaryTabContainer,
       FinalizeTab,
       Tab,
@@ -34,6 +37,6 @@ import {FinalizeTab,
   ],
   providers: [
   ],
-  entryComponents: [PrepSetupTab,FinalizeTab,Tab,Tabs,BillingTab]
+  entryComponents: [PrepSetupTab,BillingTab,FinalizeTab,Tab,Tabs]
 })
 export class ExperimentsModule { }

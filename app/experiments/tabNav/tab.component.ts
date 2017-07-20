@@ -16,8 +16,8 @@ import {PrepSetupTab} from '../the-tabs/prepSetupTab.component'
 })
 export class Tab {
   @Input('tabTitle') title: string;
-  @Input() active = false;
-  
+  @Input() active:boolean = false;
+  @Input() disable:boolean = false
 
 
 }

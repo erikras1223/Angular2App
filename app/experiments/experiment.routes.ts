@@ -1,8 +1,8 @@
-import {PrimaryTabContainer} from './primaryTabContainer.component'
+import {ExperimentContainer} from './experiment-container.component'
 import {ExperimentsResolver } from './experiments-resolver.service'
 
 
 export const ExperimentRoutes = [
-  {path: 'primaryscreen', component: PrimaryTabContainer,resolve:{tabs:ExperimentsResolver}}
+  {path: 'primaryscreen', component: ExperimentContainer,resolve:{tabs:ExperimentsResolver}}
 
 ]

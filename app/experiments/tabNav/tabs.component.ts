@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter,Output,Input } from '@angular/core';
 import { Tab } from './tab.component';
+import {TabChangeEvent} from './tab-change-event'
 
 @Component({
   selector: 'tabs',
@@ -15,6 +16,8 @@ import { Tab } from './tab.component';
 export class Tabs  {
 
   tabs: Tab[];
+  @Input() activeTabId:number;
+  @Output() tabChange = new EventEmitter<TabChangeEvent>();
 
   initContent(tabs: Tab[]) {
     this.tabs = tabs;
@@ -31,12 +34,27 @@ export class Tabs  {
     this.tabs.push(tab)
   }
 
-  selectTab(tab: Tab){
+  selectTab(tab: Tab, id?:number){
     // deactivate all tabs
-    this.tabs.forEach(tab => tab.active = false);
+    let selectedTabIndex:number = -1;
 
+    for(let i = 0; i < this.tabs.length; i ++){
+      this.tabs[i].active = false;
+      if(tab == this.tabs[i]){
+        selectedTabIndex = i;
+      }
+    }
+    //this.tabs.forEach(tab => tab.active = false);
+    let defaultPrevented = false;
+    this.tabChange.emit(
+          {activeTabId: this.activeTabId, nextId: selectedTabIndex, preventDefault: () => { defaultPrevented = true; }});
     // activate the tab the user has clicked on.
-    tab.active = true;
+    if(!defaultPrevented){
+      this.activeTabId =selectedTabIndex;
+      tab.active = true;
+    }else{
+      this.tabs[this.activeTabId].active = true;
+    }
   }
 
 }

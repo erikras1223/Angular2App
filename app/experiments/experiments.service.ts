@@ -7,7 +7,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 @Injectable()
 export class ExperimentsService {
 
-    private tabList:Array<string> = ["PrepSetupTab","FinalizeTab"]
+    private tabList:Array<string> = ["PrepSetupTab","FinalizeTab","BillingTab"]
 
   constructor(private http: Http){}
 
