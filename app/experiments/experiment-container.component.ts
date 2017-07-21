@@ -27,8 +27,6 @@ export class ExperimentContainer  implements OnInit {
               }
   
   ngOnInit(){
-      console.log("I got hit")
-
     this.componentNames = this.route.snapshot.data['tabs']; // getting a array called tabs off the route
     
   }

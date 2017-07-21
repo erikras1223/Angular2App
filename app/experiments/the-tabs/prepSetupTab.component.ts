@@ -70,7 +70,7 @@ export class PrepSetupTab extends PrimaryTab {
         this.selectedEntry = Object.assign({}, this.selectedEntry, entry); // copying entry into selectedEntry
     }
     save(){
-
+        this.invalidTab.emit("false");
     }
 
     setNotification(notifyVia: string): void { // used for radio button email and text option

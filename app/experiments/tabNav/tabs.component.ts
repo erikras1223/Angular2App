@@ -53,7 +53,7 @@ export class Tabs  {
       this.activeTabId =selectedTabIndex;
       tab.active = true;
     }else{
-      this.tabs[this.activeTabId].active = true;
+      this.tabs[this.activeTabId].active
     }
   }
 

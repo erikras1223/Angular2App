@@ -21,6 +21,7 @@ import {TabChangeEvent} from './tab-change-event'
 @Component({
   selector: 'tab-container',
   templateUrl: 'app/experiments/tabNav/primaryTabContainer.component.html'
+  
 })
 export class PrimaryTabContainer  implements OnInit, OnDestroy {
   
@@ -31,9 +32,8 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
   verName:any
   tabsRef:ComponentRef<Tabs>
   intialized:boolean = false
+ 
   
-
-
   constructor(private cdr: ChangeDetectorRef,
               private compFR: ComponentFactoryResolver,
               private viewContainer: ViewContainerRef,
@@ -45,30 +45,42 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
   initTab():void{
 
         let transTabRefs: Array<any>= []
-        let tabs = [];
+        let tabs:Tab[] = [];
 
-        var factories =Array.from(this.compFR['_factories'].keys()); //Getting a factories made from EntryComponent very touchy code, slightly a hack "may change"
-        this.components=factories.filter((fact:any)=> this.componentNames.indexOf(fact.name) > -1);
-        //console.log(this.components)
-
-        this.components.forEach((tabComponent:PrimaryTab)=>{
+        let factories = <Array<Function>>Array.from(this.compFR['_factories'].keys()); //Getting a factories made from EntryComponent very touchy code, slightly a hack "may change"
+        let compFactory= [<Type<PrimaryTab>>factories.find((x: any) => x.name === this.componentNames[0])];
+        
           
-          let compFactory = this.compFR.resolveComponentFactory(<Type<PrimaryTab>>tabComponent); // not sure how this works with Type, but it won't work without it
-          let compRef = this.viewContainer.createComponent(compFactory);
-          
-          let tabFactory = this.compFR.resolveComponentFactory(Tab);
+        //factories.filter((fact:any)=> this.componentNames.indexOf(fact.name) > -1);
+        
 
-          let transcludedTabRef = this.viewContainer.createComponent(tabFactory,this.viewContainer.length - 1,
+        //console.log(compFactory)
+
+        compFactory.forEach((tabComponent)=>{
+          
+          const compFactory = this.compFR.resolveComponentFactory(tabComponent); // not sure how this works with Type, but it won't work without it
+          const compRef = this.viewContainer.createComponent(compFactory);
+          
+          const tabFactory = this.compFR.resolveComponentFactory(Tab);
+
+          const transcludedTabRef = this.viewContainer.createComponent(tabFactory,this.viewContainer.length - 1,
                                                                       undefined,[[compRef.location.nativeElement]]);
-          transcludedTabRef.instance.title = compRef.instance.name;
+          var transculedTab = transcludedTabRef.instance
 
-          tabs.push(transcludedTabRef.instance)
+          transculedTab.title = compRef.instance.name;
+          transculedTab.initComp(compRef);
+          
+          tabs.push(transculedTab)
           transTabRefs.push(transcludedTabRef.location.nativeElement);
         })
+        tabs.map(tab =>{
+          tab.getComp().invalidTab.subscribe(message => console.log(message));
+        })
 
-        let tabsFactory = this.compFR.resolveComponentFactory(Tabs); // notice this is the tabs not tab
+        const tabsFactory = this.compFR.resolveComponentFactory(Tabs); // notice this is the tabs not tab
         this.tabsRef = this.viewContainer.createComponent(tabsFactory,0,undefined,[transTabRefs]);
         this.tabsRef.instance.initContent(tabs);
+
         this.tabsRef.instance.tabChange.subscribe( event =>{
           console.log("hello",event)
           
