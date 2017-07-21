@@ -3,17 +3,26 @@ import {FormGroup,FormBuilder, Validators,AbstractControl } from '@angular/forms
 import { CommonModule } from '@angular/common'
 import {PrimaryTab } from './primaryTab.component'
 
+import 'rxjs/add/operator/debounceTime'
+
 @Component({
 
     selector: 'prep-tab',
     templateUrl:  'app/experiments/the-tabs/prepSetupTab.component.html'
 })
 export class PrepSetupTab extends PrimaryTab {
+    
     entries = [];
     name:string = "Prep Tab";
     selectedEntry: { [key: string]: any } = {
         value: null,
         description: null
+    };
+    emailMessage:string;
+
+    private validationMessages = {
+        required: 'Please enter your email address',
+        pattern: 'Please enter a valid email address'
     };
 
     prepForm: FormGroup
@@ -49,7 +58,7 @@ export class PrepSetupTab extends PrimaryTab {
         this.prepForm = this.fb.group({
             labName: ['', [Validators.required, Validators.minLength(3) ]],
             billingAcount: '',
-            experimentType: '',
+            experimentType: this.fb.array([]),
             emailGroup: this.fb.group({
                 email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+')]],
                 confirmEmail: ['', Validators.required],
@@ -64,6 +73,11 @@ export class PrepSetupTab extends PrimaryTab {
             this.onSelectionChange(this.entries[0]);
         }
 
+        this.prepForm.get("notification").valueChanges
+                     .subscribe(value => this.setNotification(value));
+        const emailControl = this.prepForm.get('emailGroup.email');
+        emailControl.valueChanges.debounceTime(1000).subscribe(value =>
+        this.setMessage(emailControl));
     }
     onSelectionChange(entry) {
         // clone the object for immutability
@@ -84,7 +98,13 @@ export class PrepSetupTab extends PrimaryTab {
         phoneControl.updateValueAndValidity();
     }
 
-
+    setMessage(c:AbstractControl):void{
+        this.emailMessage = '';
+        if((c.touched || c.dirty) && c.errors){
+            this.emailMessage = Object.keys(c.errors).map(key =>
+                this.validationMessages[key]).join(' ');
+        }
+    }
 
 
 

@@ -24,9 +24,7 @@
             <div formGroupName="emailGroup"
                      [ngClass]="{'has-error': prepForm.get('emailGroup').errors }">
                     <div class="form-group"
-                        [ngClass]="{'has-error': (prepForm.controls.emailGroup.controls.email.touched || 
-                                                  prepForm.get('emailGroup.email').dirty) &&
-                                                  !prepForm.get('emailGroup.email').valid }">
+                        [ngClass]="{'has-error': emailMessage}" >
                         <label class="col-md-2 control-label" 
                             for="emailId">Email</label>
 
@@ -36,20 +34,8 @@
                                 type="email" 
                                 placeholder="Email (required)" 
                                 formControlName="email" />
-                            <span class="help-block" *ngIf="(prepForm.get('emailGroup.email').touched ||
-                                                             prepForm.get('emailGroup.email').dirty) &&
-                                                             prepForm.get('emailGroup.email').errors">
-                                <span *ngIf="prepForm.get('emailGroup.email').errors.required">
-                                    Please enter your email address.
-                                </span>
-                                <span *ngIf="prepForm.get('emailGroup.email').errors.pattern">
-                                    Please enter a valid email address.
-                                </span>
-
-                                <!-- This one does not work -->
-                                <span *ngIf="prepForm.get('emailGroup.email').errors.email">
-                                    Please enter a valid email address.
-                                </span>
+                            <span class="help-block" *ngIf=emailMessage >
+                                {{emailMessage}}
                             </span>
                         </div>
                     </div>
@@ -109,9 +95,9 @@
                     <td></td>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let entry of entries; let idx = index">
+                    <tr formArrayName="experimentType" *ngFor="let entry of entries; let idx = index">
                         <td>{{ entry.description }}</td>
-                        <td><input type="radio" name="certificategroup" (change)="onSelectionChange(entry)" [checked]="(idx === 0)"
+                        <td><input type="radio"  (change)="onSelectionChange(entry)" [checked]="(idx === 0)"
                                 [value]="entry.value"></td>
                     </tr>
                 </tbody>
@@ -124,15 +110,13 @@
                     <label class="radio-inline">
                                 <input type="radio" 
                                        value="email" 
-                                       formControlName = "notification"
-                                       (click)="setNotification('email')">Email
-                            </label>
+                                       formControlName = "notification">Email
+                    </label>
                     <label class="radio-inline">
                                 <input type="radio" 
                                        value="text" 
-                                       formControlName = "notification"
-                                       (click)="setNotification('text')">Text
-                            </label>
+                                       formControlName = "notification">Text
+                    </label>
                 </div>
             </div>
 
