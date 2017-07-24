@@ -11,6 +11,7 @@ import { Component,
         Type,VERSION } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {TabChangeEvent} from './tabNav/tab-change-event'
+import {TabInvalidEvent} from './tabNav/tab-invalid-event'
 import {PrimaryTabContainer} from './tabNav/primaryTabContainer.component'
 
 
@@ -41,6 +42,10 @@ export class ExperimentContainer  implements OnInit {
 
    changedTab(event:TabChangeEvent){
        console.log(this.tabsContainer)
+   }
+   tabInvalid(event:TabInvalidEvent){
+       console.log(event.tabId)
+       event.disableSpecificTabs(1,3);
    }
 
  

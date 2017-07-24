@@ -1,67 +1,81 @@
-import { Component, EventEmitter,Output,Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { Tab } from './tab.component';
-import {TabChangeEvent} from './tab-change-event'
+import { TabChangeEvent } from './tab-change-event'
 
 @Component({
   selector: 'tabs',
-  template:`
+  template: `
     <ul class="nav nav-tabs">
-      <li *ngFor="let tab of tabs" (click)="selectTab(tab)" [class.active]="tab.active">
+      <li *ngFor="let tab of tabs" (click)="selectTab(tab)" [class.active]="!tab.disable"
+        [class.disabled]="tab.disable">
         <a>{{tab.title}}</a>
       </li>
     </ul>
     <ng-content></ng-content>
   `
 })
-export class Tabs  {
+export class Tabs {
 
   tabs: Tab[];
-  @Input() activeTabId:number;
+  @Input() activeTabId: number;
   @Output() tabChange = new EventEmitter<TabChangeEvent>();
 
   initContent(tabs: Tab[]) {
     this.tabs = tabs;
     // get all active tabs
-    let activeTabs = this.tabs.filter((tab)=>tab.active);
+    let activeTabs = this.tabs.filter((tab) => tab.active);
 
     // if there is no active tab set, activate the first
-    if(activeTabs.length === 0) {
+    if (activeTabs.length === 0) {
       this.selectTab(this.tabs[0]);
     }
   }
 
-  addTab(tab:Tab){
+  addTab(tab: Tab) {
     this.tabs.push(tab)
   }
 
-  selectTabById(id:number){
+  selectTabById(id: number) {
     // need try catch here
-    if(id < this.tabs.length  && id > -1 ){
-        this.selectTab(this.tabs[id]);
+    if (id < this.tabs.length && id > -1) {
+      this.selectTab(this.tabs[id]);
     }
 
   }
-  selectTab(tab: Tab){
+  selectTab(tab: Tab) {
     // deactivate all tabs
-    let selectedTabIndex:number = -1;
+    let selectedTabIndex: number = -1;
 
-    for(let i = 0; i < this.tabs.length; i ++){
+    for (let i = 0; i < this.tabs.length; i++) {
       this.tabs[i].active = false;
-      if(tab == this.tabs[i]){
+      if (tab == this.tabs[i]) {
         selectedTabIndex = i;
       }
     }
-    //this.tabs.forEach(tab => tab.active = false);
-    let defaultPrevented = false;
-    this.tabChange.emit(
-          {activeTabId: this.activeTabId, nextId: selectedTabIndex, preventDefault: () => { defaultPrevented = true; }});
-    // activate the tab the user has clicked on.
-    if(!defaultPrevented){
-      this.activeTabId =selectedTabIndex;
-      tab.active = true;
-    }else{
-      this.tabs[this.activeTabId].active
+
+
+    if (selectedTabIndex != -1 && !this.tabs[selectedTabIndex].disable &&
+      this.activeTabId != selectedTabIndex) {
+
+      let defaultPrevented = false;
+
+      this.tabChange.emit(
+        { activeTabId: this.activeTabId, nextId: selectedTabIndex, preventDefault: () => { defaultPrevented = true; } });
+
+      if (!defaultPrevented) {
+        this.activeTabId = selectedTabIndex;
+        tab.active = true;
+      }
+
     }
+    else{
+      console.log(this.activeTabId)
+      this.tabs[this.activeTabId].active = true;
+    }
+
+
+    // activate the tab the user has clicked on.
+
   }
 
 }

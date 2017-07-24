@@ -73,18 +73,21 @@ export class PrepSetupTab extends PrimaryTab {
             this.onSelectionChange(this.entries[0]);
         }
 
+        
         this.prepForm.get("notification").valueChanges
                      .subscribe(value => this.setNotification(value));
         const emailControl = this.prepForm.get('emailGroup.email');
-        emailControl.valueChanges.debounceTime(1000).subscribe(value =>
-        this.setMessage(emailControl));
+        emailControl.valueChanges.debounceTime(1000).subscribe(value =>{
+        this.invalidTab.emit(this);
+        this.setMessage(emailControl)
+    });
     }
     onSelectionChange(entry) {
         // clone the object for immutability
         this.selectedEntry = Object.assign({}, this.selectedEntry, entry); // copying entry into selectedEntry
     }
     save(){
-        this.invalidTab.emit(this);
+        //this.invalidTab.emit(this);
     }
 
     setNotification(notifyVia: string): void { // used for radio button email and text option

@@ -1,5 +1,9 @@
-export interface tabInvalid {
-  disable:boolean;
+import {Tab} from './tab.component'
+
+export interface TabInvalidEvent {
+  //disableProceedingTabs: () => void
+  disableSpecificTabs: (start?:number, end?:number) => void
   tabId:number;
-  tabAction?:any;
+  tabLength:number;
+  //tabAction?:any;
 }
