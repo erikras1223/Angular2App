@@ -7,6 +7,8 @@ import { Component,
         ComponentFactory,
         OnDestroy,
         Input,
+        Output,
+        EventEmitter,
         Type,VERSION } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {PrepSetupTab} from '../the-tabs/prepSetupTab.component'
@@ -29,7 +31,7 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
   //components:Array<PrimaryTab>
   components:Array<any>
   @Input() componentNames:Array<string>
-  verName:any
+  @Output() tabChanged: EventEmitter<TabChangeEvent> = new EventEmitter();
   tabsRef:ComponentRef<Tabs>
   intialized:boolean = false
  
@@ -38,25 +40,22 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
               private compFR: ComponentFactoryResolver,
               private viewContainer: ViewContainerRef,
               private route:ActivatedRoute ){
-                 this.verName = `Angular! v${VERSION.full}`
               }
 
 
-  initTab():void{
+  private initTab():void{
 
         let transTabRefs: Array<any>= []
         let tabs:Tab[] = [];
 
         let factories = <Array<Function>>Array.from(this.compFR['_factories'].keys()); //Getting a factories made from EntryComponent very touchy code, slightly a hack "may change"
-        let compFactory= [<Type<PrimaryTab>>factories.find((x: any) => x.name === this.componentNames[0])];
-        
-          
-        //factories.filter((fact:any)=> this.componentNames.indexOf(fact.name) > -1);
-        
+        let compFactoryArray:Array<Type<PrimaryTab>> = []
 
-        //console.log(compFactory)
+        for(let i = 0; i < this.componentNames.length; i++){
+          compFactoryArray.push(<Type<PrimaryTab>>factories.find((x: any) => x.name === this.componentNames[i]))
+        }
 
-        compFactory.forEach((tabComponent)=>{
+        compFactoryArray.forEach((tabComponent)=>{
           
           const compFactory = this.compFR.resolveComponentFactory(tabComponent); // not sure how this works with Type, but it won't work without it
           const compRef = this.viewContainer.createComponent(compFactory);
@@ -74,17 +73,25 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
           transTabRefs.push(transcludedTabRef.location.nativeElement);
         })
         tabs.map(tab =>{
-          tab.getComp().invalidTab.subscribe(message => console.log(message));
-        })
+        tab.getComp().invalidTab.subscribe(comp => {
+                                               let tabId = -1;
+                                               for(let i = 0; i < tabs.length; i++){
+                                                 if(tabs[i].getComp() === comp){
+                                                    tabId = i;
+                                                    break;
+                                                 }
+                                               }
+                                               console.log(tabId); // searching incase another form Other than the active one is invalid
+                                            });
+        });
 
         const tabsFactory = this.compFR.resolveComponentFactory(Tabs); // notice this is the tabs not tab
         this.tabsRef = this.viewContainer.createComponent(tabsFactory,0,undefined,[transTabRefs]);
         this.tabsRef.instance.initContent(tabs);
 
-        this.tabsRef.instance.tabChange.subscribe( event =>{
-          console.log("hello",event)
-          
-        } )
+        this.tabsRef.instance.tabChange.subscribe(event =>{
+          this.tabChanged.emit(event);
+        })
 
   }
 
@@ -95,7 +102,7 @@ export class PrimaryTabContainer  implements OnInit, OnDestroy {
     this.componentNames = this.route.snapshot.data['tabs']; // getting a array called tabs off the route
     this.initTab()
     this.cdr.detectChanges();
-    this.intialized = false;
+    this.intialized = true;
     
   }
   ngOnChange(){

@@ -34,7 +34,14 @@ export class Tabs  {
     this.tabs.push(tab)
   }
 
-  selectTab(tab: Tab, id?:number){
+  selectTabById(id:number){
+    // need try catch here
+    if(id < this.tabs.length  && id > -1 ){
+        this.selectTab(this.tabs[id]);
+    }
+
+  }
+  selectTab(tab: Tab){
     // deactivate all tabs
     let selectedTabIndex:number = -1;
 

@@ -1,6 +1,7 @@
 import { Component,
         OnInit,
         Input,
+        ViewChild,
         ChangeDetectorRef,
         ViewContainerRef,
         ComponentFactoryResolver,
@@ -9,6 +10,8 @@ import { Component,
         OnDestroy,
         Type,VERSION } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
+import {TabChangeEvent} from './tabNav/tab-change-event'
+import {PrimaryTabContainer} from './tabNav/primaryTabContainer.component'
 
 
 
@@ -17,6 +20,7 @@ import { ActivatedRoute } from '@angular/router'
 })
 export class ExperimentContainer  implements OnInit {
 
+  @ViewChild(PrimaryTabContainer) tabsContainer: PrimaryTabContainer  
   componentNames:Array<string>
   verName:any
   
@@ -33,6 +37,10 @@ export class ExperimentContainer  implements OnInit {
 
    addTab(tab:string){
     this.componentNames.push(tab);
+   }
+
+   changedTab(event:TabChangeEvent){
+       console.log(this.tabsContainer)
    }
 
  
