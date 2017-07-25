@@ -41,7 +41,7 @@ export class ExperimentContainer  implements OnInit {
    }
 
    changedTab(event:TabChangeEvent){
-       console.log(this.tabsContainer)
+      console.log(this.tabsContainer.activeId)
    }
    tabInvalid(event:TabInvalidEvent){
        console.log(event.tabId)

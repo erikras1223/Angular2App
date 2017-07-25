@@ -17,7 +17,7 @@ import { TabChangeEvent } from './tab-change-event'
 export class Tabs {
 
   tabs: Tab[];
-  @Input() activeTabId: number;
+  activeTabId: number;
   @Output() tabChange = new EventEmitter<TabChangeEvent>();
 
   initContent(tabs: Tab[]) {

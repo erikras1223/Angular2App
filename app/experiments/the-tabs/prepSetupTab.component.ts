@@ -26,10 +26,11 @@ export class PrepSetupTab extends PrimaryTab {
     };
 
     prepForm: FormGroup
+    
 
 
-    constructor(private fb: FormBuilder) {
-        super() // super has no use yet
+    constructor(protected fb: FormBuilder) {
+        super(fb) // super has no use yet
     }
 
     
@@ -55,6 +56,7 @@ export class PrepSetupTab extends PrimaryTab {
             }
         ];
 
+        
         this.prepForm = this.fb.group({
             labName: ['', [Validators.required, Validators.minLength(3) ]],
             billingAcount: '',
@@ -67,6 +69,9 @@ export class PrepSetupTab extends PrimaryTab {
             notification: 'email',
                   
         })
+
+        this.theForm = this.fb.group(this.prepForm);
+
 
         // select the first one
         if (this.entries) {
@@ -87,7 +92,8 @@ export class PrepSetupTab extends PrimaryTab {
         this.selectedEntry = Object.assign({}, this.selectedEntry, entry); // copying entry into selectedEntry
     }
     save(){
-        //this.invalidTab.emit(this);
+        console.log(this.theForm);
+        this.invalidTab.emit(this);
     }
 
     setNotification(notifyVia: string): void { // used for radio button email and text option

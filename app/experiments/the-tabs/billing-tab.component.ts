@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { PrimaryTab } from  './primaryTab.component'
+import {FormGroup,FormBuilder, Validators,AbstractControl } from '@angular/forms';
 
 @Component({
   template:
@@ -14,13 +15,13 @@ import { PrimaryTab } from  './primaryTab.component'
 export class BillingTab extends PrimaryTab {
   name:string = "Billing"
 
-  constructor(private router:Router) {
-    super()
+  constructor(protected fb: FormBuilder) {
+    super(fb)
 
   }
   
 
   cancel() {
-    this.router.navigate(['events'])
+    
   }
 }

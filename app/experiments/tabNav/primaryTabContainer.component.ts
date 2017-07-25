@@ -12,6 +12,7 @@ import {
   EventEmitter,
   Type, VERSION
 } from '@angular/core'
+import {FormGroup,FormBuilder, Validators,AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router'
 import { PrepSetupTab } from '../the-tabs/prepSetupTab.component'
 import { FinalizeTab } from '../the-tabs/finalizeScreen.component'
@@ -25,13 +26,13 @@ import { TabInvalidEvent } from './tab-invalid-event'
 
 
 
+
 @Component({
   selector: 'tab-container',
   templateUrl: 'app/experiments/tabNav/primaryTabContainer.component.html'
 
 })
 export class PrimaryTabContainer implements OnInit, OnDestroy {
-
 
   //components:Array<PrimaryTab>
   private components: Array<any>
@@ -40,6 +41,7 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
   @Output() invalidTab: EventEmitter<TabInvalidEvent> = new EventEmitter();
   private tabsRef: ComponentRef<Tabs>
   private intialized: boolean = false
+  private theForm:FormGroup;
 
 
   constructor(private cdr: ChangeDetectorRef,
@@ -111,6 +113,7 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
 
       const compFactory = this.compFR.resolveComponentFactory(tabComponent);
       const compRef = this.viewContainer.createComponent(compFactory);
+      compRef.instance.theForm = this.theForm;
 
       const tabFactory = this.compFR.resolveComponentFactory(Tab);
 
@@ -136,7 +139,12 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
     })
 
   }
-
+  get activeId():number{
+      return this.tabsRef.instance.activeTabId;
+  }
+  set activeId(activeId:number){
+      this.tabsRef.instance.activeTabId = activeId;
+  }
 
 
   ngOnInit() {
