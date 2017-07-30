@@ -1,6 +1,7 @@
 <div> Hello </div>
 <tab-container #tabsRef (tabChanged)="changedTab($event)"
                 [componentNames]="componentNames"
-                (invalidTab)="tabInvalid($event)">
+                (invalidTab)="tabInvalid($event)"
+                state="PrimaryTabContainer.EDIT">
 </tab-container>
  <button type="button" (click)="addTab('BillingTab')" >Add Tab</button>

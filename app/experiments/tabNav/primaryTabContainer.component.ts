@@ -12,7 +12,7 @@ import {
   EventEmitter,
   Type, VERSION
 } from '@angular/core'
-import {FormGroup,FormBuilder, Validators,AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router'
 import { PrepSetupTab } from '../the-tabs/prepSetupTab.component'
 import { FinalizeTab } from '../the-tabs/finalizeScreen.component'
@@ -35,23 +35,39 @@ import { TabInvalidEvent } from './tab-invalid-event'
 export class PrimaryTabContainer implements OnInit, OnDestroy {
 
   //components:Array<PrimaryTab>
-  private components: Array<any>
-  @Input() componentNames: Array<string>
+
+  static readonly NEW: string = "new"
+  static readonly VIEW: string = "view"
+  static readonly EDIT: string = "edit"
+
+
+
+  @Input() state: string;
   @Output() tabChanged: EventEmitter<TabChangeEvent> = new EventEmitter();
   @Output() invalidTab: EventEmitter<TabInvalidEvent> = new EventEmitter();
+
   private tabsRef: ComponentRef<Tabs>
   private intialized: boolean = false
-  private theForm:FormGroup;
+  private theForm: FormGroup;
+
+  private _compName: Array<string>
+  @Input() set componentNames(value: Array<string>) {
+    this._compName = value;
+  }
+  get componentNames() {
+    return this._compName
+  }
 
 
   constructor(private cdr: ChangeDetectorRef,
     private compFR: ComponentFactoryResolver,
     private viewContainer: ViewContainerRef,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private fb: FormBuilder) {
+    this.theForm = this.fb.group({
+      childForms: this.fb.array([])
+    })
   }
-
-
-
 
   private tabCommunication(tabs: Tab[]): void {
     tabs.map(tab => {
@@ -68,7 +84,7 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
         const disableByIndex = function (start?: number, end?: number): void {
 
           const validIndexes = function (start: number, end: number, tabLength: number): boolean { // can't call normal function definitions in this function expression
-                                                                                                   // so for right now doing this
+            // so for right now doing this
             if (start < 0) {
               return false;
             }
@@ -90,7 +106,7 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
         }
 
 
-        this.invalidTab.emit({ disableSpecificTabs: disableByIndex, tabId: tabId, tabLength:tabs.length })
+        this.invalidTab.emit({ disableSpecificTabs: disableByIndex, tabId: tabId, tabLength: tabs.length })
       });
     });
 
@@ -106,7 +122,7 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
     let compFactoryArray: Array<Type<PrimaryTab>> = []
 
     for (let i = 0; i < this.componentNames.length; i++) {
-      compFactoryArray.push(<Type<PrimaryTab>>factories.find((x: any) => x.name === this.componentNames[i]))
+      compFactoryArray.push(<Type<PrimaryTab>>factories.find((x: any) => x.name === this.componentNames[i]));
     }
 
     compFactoryArray.forEach((tabComponent) => {
@@ -126,24 +142,25 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
 
       tabs.push(transculedTab)
       transTabRefs.push(transcludedTabRef.location.nativeElement);
-    })
-    this.tabCommunication(tabs);
+    });
 
+    this.tabCommunication(tabs);
 
     const tabsFactory = this.compFR.resolveComponentFactory(Tabs);
     this.tabsRef = this.viewContainer.createComponent(tabsFactory, 0, undefined, [transTabRefs]);
+    this.tabsRef.instance.state = this.state;
     this.tabsRef.instance.initContent(tabs);
 
     this.tabsRef.instance.tabChange.subscribe(event => {
       this.tabChanged.emit(event);
-    })
+    });
 
   }
-  get activeId():number{
-      return this.tabsRef.instance.activeTabId;
+  get activeId(): number {
+    return this.tabsRef.instance.activeTabId;
   }
-  set activeId(activeId:number){
-      this.tabsRef.instance.activeTabId = activeId;
+  set activeId(activeId: number) {
+    this.tabsRef.instance.activeTabId = activeId;
   }
 
 

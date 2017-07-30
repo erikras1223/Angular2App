@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { Tab } from './tab.component';
 import { TabChangeEvent } from './tab-change-event'
+import { PrimaryTabContainer } from './primaryTabContainer.component'
 
 @Component({
   selector: 'tabs',
@@ -18,13 +19,26 @@ export class Tabs {
 
   tabs: Tab[];
   activeTabId: number;
+  state:string;  
+
   @Output() tabChange = new EventEmitter<TabChangeEvent>();
 
   initContent(tabs: Tab[]) {
     this.tabs = tabs;
     // get all active tabs
     let activeTabs = this.tabs.filter((tab) => tab.active);
-
+    if(this.state === PrimaryTabContainer.NEW){
+      for(let i = 0; i < tabs.length; i++ ){
+        if(i === 0){
+          tabs[i].disable = false;
+        }
+        else{
+          tabs[i].disable = true;
+        }
+        
+      }
+    }
+    
     // if there is no active tab set, activate the first
     if (activeTabs.length === 0) {
       this.selectTab(this.tabs[0]);
