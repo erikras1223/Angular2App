@@ -7,7 +7,7 @@ import {ExperimentRoutes} from './experiment.routes'
 import {
        ExperimentContainer,
        FinalizeTab,
-       PrimaryTabContainer,
+       TabContainer,
        Tab,
        Tabs,
        PrepSetupTab,
@@ -27,7 +27,7 @@ import {
   ],
   declarations: [
       ExperimentContainer,
-      PrimaryTabContainer,
+      TabContainer,
       FinalizeTab,
       Tab,
       Tabs,

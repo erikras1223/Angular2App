@@ -1,48 +1,97 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import {
+  Component, EventEmitter, Output,
+  Input, ViewChild, ViewContainerRef,
+  AfterViewInit,
+  ChangeDetectorRef,
+  ComponentFactoryResolver,
+  ComponentRef, Type
+} from '@angular/core';
+import { FormGroup } from '@angular/forms'
 import { Tab } from './tab.component';
+import { PrepSetupTab } from '../the-tabs/prepSetupTab.component'
 import { TabChangeEvent } from './tab-change-event'
-import { PrimaryTabContainer } from './primaryTabContainer.component'
+import { TabContainer } from './tab-container.component'
+import { PrimaryTab } from '../the-tabs/primaryTab.component'
 
 @Component({
   selector: 'tabs',
   template: `
-    <ul class="nav nav-tabs">
-      <li *ngFor="let tab of tabs" (click)="selectTab(tab)" [class.active]="!tab.disable"
+  
+    <ul #container class="nav nav-tabs">
+      <li class="nav-item" *ngFor="let tab of tabs" (click)="selectTab(tab)"
+        [class.active]="tab.active"
         [class.disabled]="tab.disable">
-        <a>{{tab.title}}</a>
+        <a class="nav-link" 
+          [class.disabled]="tab.disable"
+          [class.active]="tab.active">{{tab.title}}</a>
       </li>
     </ul>
     <ng-content></ng-content>
+  
   `
 })
-export class Tabs {
+export class Tabs implements AfterViewInit {
 
   tabs: Tab[];
   activeTabId: number;
-  state:string;  
+  state: string;
+  @ViewChild('container', { read: ViewContainerRef }) tabsContainer: ViewContainerRef;
 
   @Output() tabChange = new EventEmitter<TabChangeEvent>();
+
+  constructor(private cdRef: ChangeDetectorRef, private compFR: ComponentFactoryResolver) { }
 
   initContent(tabs: Tab[]) {
     this.tabs = tabs;
     // get all active tabs
+    if (!tabs) {
+      return;
+    }
+    if (this.tabs.length < 1) {
+      return;
+    }
     let activeTabs = this.tabs.filter((tab) => tab.active);
-    if(this.state === PrimaryTabContainer.NEW){
-      for(let i = 0; i < tabs.length; i++ ){
-        if(i === 0){
+    if (this.state === TabContainer.NEW) {
+      for (let i = 0; i < tabs.length; i++) {
+        if (i === 0) {
           tabs[i].disable = false;
         }
-        else{
+        else {
           tabs[i].disable = true;
         }
-        
+
       }
     }
-    
+
     // if there is no active tab set, activate the first
     if (activeTabs.length === 0) {
       this.selectTab(this.tabs[0]);
     }
+  }
+
+
+
+  insertTab(component: Type<PrimaryTab>, parentForm: FormGroup) {
+
+    let compFactory = this.compFR.resolveComponentFactory(component);
+    let compRef = this.tabsContainer.createComponent(compFactory);
+    compRef.instance.theForm = parentForm;
+
+    let tabFactory = this.compFR.resolveComponentFactory(Tab);
+    let tabRef = this.tabsContainer.createComponent(tabFactory, 0, undefined, [[compRef.location.nativeElement]]);
+    tabRef.instance.title = compRef.instance.name;
+    tabRef.instance.initComp(compRef);
+
+    this.tabs.push(tabRef.instance);
+    this.selectTab(tabRef.instance);
+    
+
+  }
+
+
+
+  ngAfterViewInit() {
+    //this.openNewTab();
   }
 
   addTab(tab: Tab) {
@@ -72,6 +121,7 @@ export class Tabs {
       this.activeTabId != selectedTabIndex) {
 
       let defaultPrevented = false;
+      console.log(this.tabs[selectedTabIndex].disable)
 
       this.tabChange.emit(
         { activeTabId: this.activeTabId, nextId: selectedTabIndex, preventDefault: () => { defaultPrevented = true; } });
@@ -82,7 +132,7 @@ export class Tabs {
       }
 
     }
-    else{
+    else {
       console.log(this.activeTabId)
       this.tabs[this.activeTabId].active = true;
     }

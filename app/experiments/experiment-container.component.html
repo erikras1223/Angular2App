@@ -2,6 +2,6 @@
 <tab-container #tabsRef (tabChanged)="changedTab($event)"
                 [componentNames]="componentNames"
                 (invalidTab)="tabInvalid($event)"
-                state="PrimaryTabContainer.EDIT">
+                [state]="theState">
 </tab-container>
  <button type="button" (click)="addTab('BillingTab')" >Add Tab</button>

@@ -6,13 +6,12 @@ import { Component,
         ViewContainerRef,
         ComponentFactoryResolver,
         ComponentRef,
-        ComponentFactory,
         OnDestroy,
         Type,VERSION } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {TabChangeEvent} from './tabNav/tab-change-event'
 import {TabInvalidEvent} from './tabNav/tab-invalid-event'
-import {PrimaryTabContainer} from './tabNav/primaryTabContainer.component'
+import {TabContainer} from './tabNav/tab-container.component'
 
 
 
@@ -21,9 +20,10 @@ import {PrimaryTabContainer} from './tabNav/primaryTabContainer.component'
 })
 export class ExperimentContainer  implements OnInit {
 
-  @ViewChild(PrimaryTabContainer) tabsContainer: PrimaryTabContainer  
+  @ViewChild(TabContainer) tabsContainer: TabContainer  
   componentNames:Array<string>
   verName:any
+  theState:string;
   
 
   constructor(
@@ -32,12 +32,13 @@ export class ExperimentContainer  implements OnInit {
               }
   
   ngOnInit(){
+    this.theState = TabContainer.NEW;
     this.componentNames = this.route.snapshot.data['tabs']; // getting a array called tabs off the route
     
   }
 
    addTab(tab:string){
-    this.componentNames.push(tab);
+    this.tabsContainer.addTab('BillingTab')
    }
 
    changedTab(event:TabChangeEvent){

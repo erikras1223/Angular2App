@@ -25,14 +25,12 @@ import { TabInvalidEvent } from './tab-invalid-event'
 
 
 
-
-
 @Component({
   selector: 'tab-container',
-  templateUrl: 'app/experiments/tabNav/primaryTabContainer.component.html'
+  templateUrl: 'app/experiments/tabNav/tab-container.component.html'
 
 })
-export class PrimaryTabContainer implements OnInit, OnDestroy {
+export class TabContainer implements OnInit, OnDestroy {
 
   //components:Array<PrimaryTab>
 
@@ -47,6 +45,7 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
   @Output() invalidTab: EventEmitter<TabInvalidEvent> = new EventEmitter();
 
   private tabsRef: ComponentRef<Tabs>
+  private theRef: Array<ComponentRef<Tab>> = []
   private intialized: boolean = false
   private theForm: FormGroup;
 
@@ -142,12 +141,14 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
 
       tabs.push(transculedTab)
       transTabRefs.push(transcludedTabRef.location.nativeElement);
+      this.theRef.push(transcludedTabRef)
     });
 
     this.tabCommunication(tabs);
 
     const tabsFactory = this.compFR.resolveComponentFactory(Tabs);
     this.tabsRef = this.viewContainer.createComponent(tabsFactory, 0, undefined, [transTabRefs]);
+
     this.tabsRef.instance.state = this.state;
     this.tabsRef.instance.initContent(tabs);
 
@@ -156,13 +157,30 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
     });
 
   }
+
+  addTab(component:string ): void {
+    try {
+      let factories = <Array<Function>>Array.from(this.compFR['_factories'].keys()); //Getting a factories made from EntryComponent very touchy code, slightly a hack "may change"
+      let compFactory: Type<PrimaryTab>;
+
+      compFactory = <Type<PrimaryTab>>factories.find((x: any) => x.name === component);
+      
+      if(!compFactory){
+        throw new Error("Make sure component extends PrimaryTab and is in the entryComponents list in your module");
+      }
+      this.tabsRef.instance.insertTab(compFactory, this.theForm);
+      
+    } catch (e) {
+        console.log(e.stack);
+    }
+
+  }
   get activeId(): number {
     return this.tabsRef.instance.activeTabId;
   }
   set activeId(activeId: number) {
     this.tabsRef.instance.activeTabId = activeId;
   }
-
 
   ngOnInit() {
 
@@ -178,8 +196,6 @@ export class PrimaryTabContainer implements OnInit, OnDestroy {
     }
 
   }
-
-
 
   ngOnDestroy() {
     this.tabsRef.destroy();
