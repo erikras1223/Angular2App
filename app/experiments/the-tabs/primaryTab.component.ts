@@ -35,10 +35,10 @@ export class PrimaryTab {
     }
 
     protected validateControl(value:any,address:string){
-        const childForms = (<FormArray>this.theForm.root).controls["childForms"];
+        const childForms:FormArray = (<FormArray>this.theForm.root).controls["childForms"];
         let control: AbstractControl
         for(let i = 0; i < childForms.length; i++){
-           control= childForms.at(i).get("age");
+           control= childForms.at(i).get(address);
            if(control && !!control.validator){
                control.setValue("loook here chippy");
                break;

@@ -14,6 +14,7 @@ export class PrepSetupTab extends PrimaryTab {
 
     entries = [];
     name: string = "Prep Tab";
+    showControl:boolean = true;
     selectedEntry: { [key: string]: any } = {
         value: null,
         description: null
@@ -70,7 +71,9 @@ export class PrepSetupTab extends PrimaryTab {
             notification: 'email',
 
         })
-
+        Object.keys(this.prepForm.controls).forEach((key: string) => {
+            console.log(key);
+          });
         this.addChildToForm(this.prepForm);  // important for cross form validation
         this.controlsToLink("phone",this.prepForm.get("labName"));
 
