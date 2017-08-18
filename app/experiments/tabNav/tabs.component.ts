@@ -59,7 +59,8 @@ export class Tabs {
   selectTab(tab: Tab) {
     // deactivate all tabs
     let selectedTabIndex: number = -1;
-
+    
+    // heellllloo
     for (let i = 0; i < this.tabs.length; i++) {
       this.tabs[i].active = false;
       if (tab == this.tabs[i]) {
